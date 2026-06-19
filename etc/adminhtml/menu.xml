@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:backend:Menu/etc/menu.xsd">
+    <menu>
+        <add id="DeployEcommerce_UrlRewriteImportExport::manage"
+             title="URL Rewrite Import / Export"
+             translate="title"
+             module="DeployEcommerce_UrlRewriteImportExport"
+             sortOrder="90"
+             parent="Magento_Backend::system_tools"
+             action="deployecommerce_urlrewriteimportexport/manage/index"
+             resource="DeployEcommerce_UrlRewriteImportExport::manage"/>
+    </menu>
+</config>

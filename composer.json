@@ -1,0 +1,22 @@
+{
+    "name": "deployecommerce/module-url-rewrite-import-export",
+    "version": "1.0.0",
+    "description": "Export and import the url_rewrite table as CSV from the Magento admin.",
+    "type": "magento2-module",
+    "require": {
+        "php": ">=8.2",
+        "magento/framework": "*",
+        "league/csv": "^9.28"
+    },
+    "license": [
+        "MIT"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "DeployEcommerce\\UrlRewriteImportExport\\": ""
+        }
+    }
+}

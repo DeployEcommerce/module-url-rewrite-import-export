@@ -1,0 +1,242 @@
+<?php
+/** @var \DeployEcommerce\UrlRewriteImportExport\Block\Adminhtml\Manage $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$result = $block->getLastResult();
+$columns = $block->getColumns();
+?>
+<style>
+    .deployecommerce-urlrewriteimportexport .message { margin-bottom: 30px; }
+    .deployecommerce-urlrewriteimportexport .admin__page-section { margin-bottom: 40px; }
+    .deployecommerce-urlrewriteimportexport .admin__page-section-title { margin-bottom: 15px; padding-bottom: 10px; }
+    .deployecommerce-urlrewriteimportexport p { margin: 0 0 20px; max-width: 700px; line-height: 1.5; }
+    .deployecommerce-urlrewriteimportexport .admin__field { margin-bottom: 25px; }
+    .deployecommerce-urlrewriteimportexport .admin__field-label { display: block; margin-bottom: 8px; font-weight: 600; }
+    .deployecommerce-urlrewriteimportexport .admin__field-control { max-width: 500px; }
+    .deployecommerce-urlrewriteimportexport input[type="checkbox"] + label { margin-left: 6px; }
+    .deployecommerce-urlrewriteimportexport label[for="truncate_existing"] { display: inline-block; margin-bottom: 15px; }
+    .deployecommerce-urlrewriteimportexport .note { margin-top: 10px; line-height: 1.5; }
+    .deployecommerce-urlrewriteimportexport .de-report-table {
+        border-collapse: collapse;
+        width: auto;
+        min-width: 460px;
+        margin-bottom: 30px;
+        background: #fff;
+        border: 1px solid #d6d6d6;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    .deployecommerce-urlrewriteimportexport .de-report-table th,
+    .deployecommerce-urlrewriteimportexport .de-report-table td {
+        padding: 10px 18px;
+        border: 1px solid #e3e3e3;
+        text-align: left;
+        vertical-align: middle;
+        line-height: 1.4;
+    }
+    .deployecommerce-urlrewriteimportexport .de-report-table th {
+        background: #f5f5f5;
+        font-weight: 600;
+        color: #303030;
+        width: 60%;
+    }
+    .deployecommerce-urlrewriteimportexport .de-report-table td {
+        color: #303030;
+    }
+    .deployecommerce-urlrewriteimportexport .de-report-table tr:nth-child(even) td,
+    .deployecommerce-urlrewriteimportexport .de-report-table tr:nth-child(even) th {
+        background: #fafafa;
+    }
+    .deployecommerce-urlrewriteimportexport form .action-primary { margin-top: 10px; }
+</style>
+
+<div class="deployecommerce-urlrewriteimportexport">
+
+    <div class="message message-warning">
+        <div>
+            <strong><?= $escaper->escapeHtml(__('Back up before you change anything.')) ?></strong>
+            <?= $escaper->escapeHtml(__(
+                'The url_rewrite table controls every storefront URL and redirect. A bad import '
+                . 'can break links sitewide. Always export a CSV backup first and keep it safe. '
+                . 'This tool also writes an automatic safety backup to var/rewrites/ before every '
+                . 'import, but that is a fallback — not a substitute for your own backup.'
+            )) ?>
+        </div>
+    </div>
+
+    <?php if ($result !== null): ?>
+        <?php $opts = $result['options'] ?? []; ?>
+        <div class="admin__page-section">
+            <div class="admin__page-section-title">
+                <span class="title"><?= $escaper->escapeHtml(__('Last import result')) ?></span>
+            </div>
+            <table class="de-report-table">
+                <tbody>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Rows in import file')) ?></th>
+                        <td><?= (int) ($result['total'] ?? 0) ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Imported (succeeded)')) ?></th>
+                        <td><?= (int) ($result['inserted'] ?? 0) ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Skipped (duplicates)')) ?></th>
+                        <td><?= (int) ($result['skipped'] ?? 0) ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Failed')) ?></th>
+                        <td><?= (int) ($result['failed'] ?? 0) ?></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="admin__page-section-title">
+                <span class="title"><?= $escaper->escapeHtml(__('Options used (include in any debug report)')) ?></span>
+            </div>
+            <table class="de-report-table">
+                <tbody>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Truncate before import')) ?></th>
+                        <td><?= !empty($opts['truncate']) ? $escaper->escapeHtml(__('Yes')) : $escaper->escapeHtml(__('No')) ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Import mode')) ?></th>
+                        <td><?= $escaper->escapeHtml((string) ($opts['mode'] ?? '')) ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('ID handling')) ?></th>
+                        <td><?= $escaper->escapeHtml((string) ($opts['id_handling'] ?? '')) ?></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <?php if (!empty($result['errors'])): ?>
+                <div class="admin__page-section-title">
+                    <span class="title"><?= $escaper->escapeHtml(__('Messages (first 20)')) ?></span>
+                </div>
+                <ul>
+                    <?php foreach ($result['errors'] as $error): ?>
+                        <li><?= $escaper->escapeHtml((string) $error) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+
+    <div class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $escaper->escapeHtml(__('Export')) ?></span>
+        </div>
+        <p><?= $escaper->escapeHtml(__('Download the entire url_rewrite table as a CSV file.')) ?></p>
+        <a class="action-primary" href="<?= $escaper->escapeUrl($block->getExportUrl()) ?>">
+            <span><?= $escaper->escapeHtml(__('Export Rewrites to CSV')) ?></span>
+        </a>
+    </div>
+
+    <div class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $escaper->escapeHtml(__('Import')) ?></span>
+        </div>
+        <p><?= $escaper->escapeHtml(__(
+            'Upload a CSV containing url rewrites. It is recommended to use one produced by this '
+            . 'export but providing your columns match the structure of the url_rewrite table it will work.'
+        )) ?></p>
+
+        <form id="urlrewriteimportexport-import-form"
+              action="<?= $escaper->escapeUrl($block->getImportUrl()) ?>"
+              method="post"
+              enctype="multipart/form-data">
+            <?= $block->getBlockHtml('formkey') ?>
+
+            <div class="admin__field">
+                <label class="admin__field-label" for="import_file">
+                    <?= $escaper->escapeHtml(__('CSV file')) ?>
+                </label>
+                <div class="admin__field-control">
+                    <input type="file" id="import_file" name="import_file" accept=".csv" required/>
+                </div>
+            </div>
+
+            <div class="admin__field">
+                <label class="admin__field-label" for="import_mode">
+                    <?= $escaper->escapeHtml(__('Import mode')) ?>
+                </label>
+                <div class="admin__field-control">
+                    <select id="import_mode" name="import_mode" class="admin__control-select">
+                        <?php foreach ($block->getImportModes() as $value => $label): ?>
+                            <option value="<?= $escaper->escapeHtmlAttr($value) ?>">
+                                <?= $escaper->escapeHtml($label) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="admin__field">
+                <label class="admin__field-label" for="id_handling">
+                    <?= $escaper->escapeHtml(__('ID handling')) ?>
+                </label>
+                <div class="admin__field-control">
+                    <select id="id_handling" name="id_handling" class="admin__control-select">
+                        <?php foreach ($block->getIdHandlingOptions() as $value => $label): ?>
+                            <option value="<?= $escaper->escapeHtmlAttr($value) ?>">
+                                <?= $escaper->escapeHtml($label) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="admin__field">
+                <div class="admin__field-control">
+                    <input type="checkbox" id="truncate_existing" name="truncate_existing" value="1"/>
+                    <label for="truncate_existing">
+                        <strong><?= $escaper->escapeHtml(__(
+                            'Truncate all existing url_rewrite records before importing'
+                        )) ?></strong>
+                    </label>
+                    <div class="message message-warning">
+                        <div>
+                            <?= $escaper->escapeHtml(__(
+                                'Warning: if ticked, the entire url_rewrite table is emptied before the '
+                                . 'import runs. This cannot be undone. This can lead to catastrophic data loss.'
+                            )) ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin__field">
+                <button type="submit" class="action-primary">
+                    <span><?= $escaper->escapeHtml(__('Import Rewrites from CSV')) ?></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+require(['jquery', 'Magento_Ui/js/modal/confirm'], function ($, confirmation) {
+    'use strict';
+    var $form = $('#urlrewriteimportexport-import-form');
+    $form.on('submit', function (e) {
+        if (!$('#truncate_existing').is(':checked')) {
+            return true;
+        }
+        e.preventDefault();
+        confirmation({
+            title: $.mage.__('Truncate the url_rewrite table?'),
+            content: $.mage.__(
+                'You ticked "truncate". This will permanently delete EVERY existing row in the '
+                + 'url_rewrite table before importing. A safety backup will be written first, but '
+                + 'this is irreversible without restoring a backup. Continue?'
+            ),
+            actions: {
+                confirm: function () {
+                    $form.off('submit').trigger('submit');
+                }
+            }
+        });
+        return false;
+    });
+});
+</script>

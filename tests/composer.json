@@ -1,0 +1,20 @@
+{
+    "name": "deployecommerce/module-url-rewrite-import-export-tests",
+    "description": "Isolated PEST test harness for DeployEcommerce_UrlRewriteImportExport. Kept separate from Magento's PHPUnit 9 so Pest's PHPUnit 10 does not conflict.",
+    "license": "MIT",
+    "require-dev": {
+        "php": ">=8.2",
+        "pestphp/pest": "^2.34"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DeployEcommerce\\UrlRewriteImportExport\\": "../"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable"
+}
