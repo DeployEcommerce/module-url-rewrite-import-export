@@ -91,6 +91,15 @@ class Import extends Action implements HttpPostActionInterface
             $this->cacheTypeList->cleanType('full_page');
             $this->cacheTypeList->cleanType('block_html');
 
+            if ($result->getDemoted() > 0) {
+                $this->messageManager->addNoticeMessage(__(
+                    '%1 rewrite(s) claimed the generated URL of an entity that already had one. '
+                    . 'They were turned into 301 redirects to the current URL, which keeps the '
+                    . 'old links working and stops category/product collections from failing to load.',
+                    $result->getDemoted()
+                ));
+            }
+
             if ($result->hasErrors()) {
                 $this->messageManager->addWarningMessage(__(
                     'Import finished with issues: %1 imported, %2 skipped, %3 failed of %4 rows. '

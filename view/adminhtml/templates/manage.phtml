@@ -86,6 +86,10 @@ $columns = $block->getColumns();
                         <th><?= $escaper->escapeHtml(__('Failed')) ?></th>
                         <td><?= (int) ($result['failed'] ?? 0) ?></td>
                     </tr>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Duplicate generated rewrites demoted to 301')) ?></th>
+                        <td><?= (int) ($result['demoted'] ?? 0) ?></td>
+                    </tr>
                 </tbody>
             </table>
 
