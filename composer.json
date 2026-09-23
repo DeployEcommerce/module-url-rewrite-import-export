@@ -1,6 +1,6 @@
 {
     "name": "deployecommerce/module-url-rewrite-import-export",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "Export and import the url_rewrite table as CSV from the Magento admin.",
     "type": "magento2-module",
     "require": {
