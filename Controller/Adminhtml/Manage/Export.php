@@ -13,6 +13,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Filesystem;
 
@@ -37,7 +38,14 @@ class Export extends Action implements HttpGetActionInterface
         parent::__construct($context);
     }
 
-    public function execute(): Redirect|\Magento\Framework\App\ResponseInterface
+    /**
+     * No native return type: the interceptor generator in Magento 2.4.5 calls
+     * ReflectionNamedType::getName() and fatals on a union type during
+     * setup:di:compile.
+     *
+     * @return Redirect|ResponseInterface
+     */
+    public function execute()
     {
         try {
             $filename = $this->filenameGenerator->generate(new \DateTimeImmutable('now'));
